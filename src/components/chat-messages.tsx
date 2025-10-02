@@ -1,11 +1,17 @@
 import {ChatStatus, UIMessage} from "ai";
-import {Conversation, ConversationContent, ConversationScrollButton,} from "@/components/ai-elements/conversation";
+import {
+    Conversation,
+    ConversationContent,
+    ConversationEmptyState,
+    ConversationScrollButton,
+} from "@/components/ai-elements/conversation";
 import {Response} from "@/components/ai-elements/response";
 import {Fragment} from "react";
 import {Message, MessageContent} from "@/components/ai-elements/message";
 import {Action, Actions} from "@/components/ai-elements/actions";
 import {CopyIcon} from "lucide-react";
 import {Loader} from "@/components/ai-elements/loader";
+import {authClient} from "@/auth/auth-client";
 
 interface Props {
     messages: UIMessage[];
@@ -13,6 +19,9 @@ interface Props {
 }
 
 export function ChatMessages(props: Props) {
+    const session = authClient.useSession();
+    const showEmptyMessage = !session.isPending && !props.messages.length;
+
     return (
         <Conversation className="h-full">
             <ConversationContent>
@@ -23,7 +32,13 @@ export function ChatMessages(props: Props) {
                         />
                     </div>
                 ))}
-                {props.status === "submitted" && <Loader />}
+                {props.status === "submitted" && <Loader/>}
+                {showEmptyMessage && (
+                    <ConversationEmptyState
+                        title={session.data ?  `Hi ${session.data.user.name.split(" ").at(0)}, ready to chat?` : "Welcome to ChatAI"}
+                        description={session.data ? "Your AI assistant is here to answer questions, brainstorm ideas, or just talk." : "Sign in to start chatting and get personalized answers, advice, and more."}
+                    />
+                )}
             </ConversationContent>
             <ConversationScrollButton/>
         </Conversation>

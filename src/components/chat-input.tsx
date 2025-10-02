@@ -7,6 +7,7 @@ import {
     PromptInputToolbar, PromptInputTools
 } from "@/components/ai-elements/prompt-input";
 import {useState} from "react";
+import {authClient} from "@/auth/auth-client";
 
 interface Props {
     onSubmit: (value: string) => void;
@@ -14,6 +15,7 @@ interface Props {
 
 export function ChatInput(props: Props) {
     const [input, setInput] = useState("");
+    const session = authClient.useSession();
 
     function submitHandler() {
         props.onSubmit(input);
@@ -28,7 +30,7 @@ export function ChatInput(props: Props) {
                             <PromptInputAttachment data={attachment}/>
                         )}
                     </PromptInputAttachments>
-                    <PromptInputTextarea maxLength={512} onChange={(e) => {
+                    <PromptInputTextarea disabled={!session.data} maxLength={512} onChange={(e) => {
                         setInput(e.target.value);
                     }} value={input}/>
                 </PromptInputBody>
@@ -37,12 +39,12 @@ export function ChatInput(props: Props) {
                         <PromptInputActionMenu>
                             <PromptInputActionMenuTrigger/>
                             <PromptInputActionMenuContent>
-                                <PromptInputActionAddAttachments/>
+                                <PromptInputActionAddAttachments disabled={!session.data}/>
                             </PromptInputActionMenuContent>
                         </PromptInputActionMenu>
                     </PromptInputTools>
                     <PromptInputSubmit
-                        disabled={false}
+                        disabled={!session.data}
                         status={"ready"}
                     />
                 </PromptInputToolbar>
