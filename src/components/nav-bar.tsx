@@ -19,24 +19,26 @@ export function NavBar() {
     }
 
     return (
-        <header className="flex items-center justify-between w-full">
-            <h1 className="text-xl font-semibold tracking-tight">ChatAI</h1>
-            <section>
-                {!!session.data ?
-                    (
+        <header
+            className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+            <div className="flex h-16 items-center justify-between px-4 w-full">
+                <h1 className="text-xl font-semibold tracking-tight">ChatAI</h1>
+
+                <div>
+                    {session.isPending ? (
+                        <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                            <Loader2 className="h-4 w-4 animate-spin"/>
+                            <span>Loading...</span>
+                        </div>
+                    ) : !!session.data ? (
                         <UserAvatar name={session.data.user.name} image={session.data.user.image}/>
-                    ) : session.isPending ?
-                        (
-                            <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                                <Loader2 className="h-4 w-4 animate-spin"/>
-                                <span>Loading...</span>
-                            </div>
-                        ) :
-                        (
-                            <Button onClick={googleSignIn}>Sign In</Button>
-                        )
-                }
-            </section>
+                    ) : (
+                        <Button onClick={googleSignIn} variant="default" size="sm">
+                            Sign in
+                        </Button>
+                    )}
+                </div>
+            </div>
         </header>
     );
 }
@@ -53,10 +55,8 @@ function UserAvatar(props: { name: string, image?: string | null }) {
                 </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent className="w-56" align="end" forceMount>
-                <div className="flex items-center justify-start gap-2 p-2">
-                    <div className="flex flex-col space-y-1 leading-none">
-                        <p className="font-medium">{props.name}</p>
-                    </div>
+                <div className="p-2">
+                    <p className="leading-none font-medium">{props.name}</p>
                 </div>
                 <DropdownMenuSeparator/>
                 <DropdownMenuItem className="cursor-pointer" onSelect={() => authClient.signOut()}>
