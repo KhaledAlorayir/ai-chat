@@ -12,6 +12,7 @@ import {Action, Actions} from "@/components/ai-elements/actions";
 import {CopyIcon} from "lucide-react";
 import {Loader} from "@/components/ai-elements/loader";
 import {authClient} from "@/auth/auth-client";
+import {Source, Sources, SourcesContent, SourcesTrigger} from "@/components/ai-elements/sources";
 
 interface Props {
     messages: UIMessage[];
@@ -26,16 +27,15 @@ export function ChatMessages(props: Props) {
         <Conversation className="h-full">
             <ConversationContent>
                 {props.messages.map((message) => (
-                    <div key={message.id}>
-                        <MessageCard
-                            message={message}
-                        />
-                    </div>
+                    <MessageCard
+                        key={message.id}
+                        message={message}
+                    />
                 ))}
                 {props.status === "submitted" && <Loader/>}
                 {showEmptyMessage && (
                     <ConversationEmptyState
-                        title={session.data ?  `Hi ${session.data.user.name.split(" ").at(0)}, ready to chat?` : "Welcome to ChatAI"}
+                        title={session.data ? `Hi ${session.data.user.name.split(" ").at(0)}, ready to chat?` : "Welcome to ChatAI"}
                         description={session.data ? "Your AI assistant is here to answer questions, brainstorm ideas, or just talk." : "Sign in to start chatting and get personalized answers, advice, and more."}
                     />
                 )}
@@ -46,8 +46,11 @@ export function ChatMessages(props: Props) {
 }
 
 function MessageCard({message}: { message: UIMessage }) {
+    const isAiMessage = message.role === 'assistant';
     return (
-        <>
+        <div>
+            {isAiMessage && <MessageSources message={message}/>}
+
             {message.parts.map((part, i) => {
                 switch (part.type) {
                     case "text":
@@ -60,7 +63,7 @@ function MessageCard({message}: { message: UIMessage }) {
                                         </Response>
                                     </MessageContent>
                                 </Message>
-                                {message.role === "assistant" && i === message.parts.length - 1 && (
+                                {isAiMessage && i === message.parts.length - 1 && (
                                     <Actions>
                                         <Action
                                             onClick={() =>
@@ -78,6 +81,31 @@ function MessageCard({message}: { message: UIMessage }) {
                         return null;
                 }
             })}
+        </div>
+    );
+}
+
+function MessageSources({message}: { message: UIMessage }) {
+    const sourceParts = message.parts.filter((part) => part.type === "source-url");
+
+    return (
+        <>
+            {!!sourceParts.length && (
+                <Sources>
+                    <SourcesTrigger
+                        count={sourceParts.length}
+                    />
+                    {sourceParts.map((part, i) => (
+                        <SourcesContent key={`${message.id}-${i}`}>
+                            <Source
+                                key={`${message.id}-${i}`}
+                                href={part.url}
+                                title={part.url}
+                            />
+                        </SourcesContent>
+                    ))}
+                </Sources>
+            )}
         </>
     );
 }

@@ -3,22 +3,27 @@ import {
     PromptInputActionAddAttachments, PromptInputActionMenu, PromptInputActionMenuContent, PromptInputActionMenuTrigger,
     PromptInputAttachment,
     PromptInputAttachments,
-    PromptInputBody, PromptInputSubmit, PromptInputTextarea,
+    PromptInputBody, PromptInputButton, PromptInputSubmit, PromptInputTextarea,
     PromptInputToolbar, PromptInputTools
 } from "@/components/ai-elements/prompt-input";
 import {useState} from "react";
 import {authClient} from "@/auth/auth-client";
+import {GlobeIcon} from "lucide-react";
+import {ChatStatus} from "ai";
 
 interface Props {
-    onSubmit: (value: string) => void;
+    status: ChatStatus;
+    onSubmit: (value: string, useWebSearch: boolean) => void;
 }
 
 export function ChatInput(props: Props) {
     const [input, setInput] = useState("");
+    const [useWebSearch, setUseWebSearch] = useState(false);
+
     const session = authClient.useSession();
 
     function submitHandler() {
-        props.onSubmit(input);
+        props.onSubmit(input, useWebSearch);
         setInput("");
     }
 
@@ -34,7 +39,7 @@ export function ChatInput(props: Props) {
                         setInput(e.target.value);
                     }} value={input}/>
                 </PromptInputBody>
-                <PromptInputToolbar>
+                <PromptInputToolbar className="py-3">
                     <PromptInputTools>
                         <PromptInputActionMenu>
                             <PromptInputActionMenuTrigger/>
@@ -42,10 +47,18 @@ export function ChatInput(props: Props) {
                                 <PromptInputActionAddAttachments disabled={!session.data}/>
                             </PromptInputActionMenuContent>
                         </PromptInputActionMenu>
+
+                        <PromptInputButton
+                            onClick={() => setUseWebSearch(!useWebSearch)}
+                            variant={useWebSearch ? 'default' : 'ghost'}
+                        >
+                            <GlobeIcon size={16} />
+                            <span>Search</span>
+                        </PromptInputButton>
                     </PromptInputTools>
                     <PromptInputSubmit
                         disabled={!session.data}
-                        status={"ready"}
+                        status={props.status}
                     />
                 </PromptInputToolbar>
             </PromptInput>
