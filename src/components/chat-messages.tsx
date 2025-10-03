@@ -1,4 +1,4 @@
-import {ChatStatus, UIMessage} from "ai";
+import {ChatStatus, SourceUrlUIPart} from "ai";
 import {
     Conversation,
     ConversationContent,
@@ -13,9 +13,11 @@ import {CopyIcon} from "lucide-react";
 import {Loader} from "@/components/ai-elements/loader";
 import {authClient} from "@/auth/auth-client";
 import {Source, Sources, SourcesContent, SourcesTrigger} from "@/components/ai-elements/sources";
+import {ChatMessage} from "@/app/api/chat/route";
+import {ToolHeader} from "@/components/ai-elements/tool";
 
 interface Props {
-    messages: UIMessage[];
+    messages: ChatMessage[];
     status: ChatStatus;
 }
 
@@ -24,7 +26,7 @@ export function ChatMessages(props: Props) {
     const showEmptyMessage = !session.isPending && !props.messages.length;
 
     return (
-        <Conversation className="h-full">
+        <Conversation>
             <ConversationContent>
                 {props.messages.map((message) => (
                     <MessageCard
@@ -45,11 +47,13 @@ export function ChatMessages(props: Props) {
     );
 }
 
-function MessageCard({message}: { message: UIMessage }) {
-    const isAiMessage = message.role === 'assistant';
+function MessageCard({message}: { message: ChatMessage }) {
+    const isAiMessage = message.role === "assistant";
+    const sourceParts = message.parts.filter((part) => part.type === "source-url");
+
     return (
         <div>
-            {isAiMessage && <MessageSources message={message}/>}
+            {isAiMessage && !!sourceParts.length && <MessageSources sources={sourceParts}/>}
 
             {message.parts.map((part, i) => {
                 switch (part.type) {
@@ -77,6 +81,16 @@ function MessageCard({message}: { message: UIMessage }) {
                                 )}
                             </Fragment>
                         );
+
+                    case "tool-web_search":
+                        return (
+                            <ToolHeader
+                                key={`${message.id}-${i}`}
+                                type="tool-web_search"
+                                title="web search"
+                                state={part.state}
+                            />
+                        );
                     default:
                         return null;
                 }
@@ -85,20 +99,17 @@ function MessageCard({message}: { message: UIMessage }) {
     );
 }
 
-function MessageSources({message}: { message: UIMessage }) {
-    const sourceParts = message.parts.filter((part) => part.type === "source-url");
-
+function MessageSources({sources}: { sources: SourceUrlUIPart[] }) {
     return (
         <>
-            {!!sourceParts.length && (
+            {!!sources.length && (
                 <Sources>
                     <SourcesTrigger
-                        count={sourceParts.length}
+                        count={sources.length}
                     />
-                    {sourceParts.map((part, i) => (
-                        <SourcesContent key={`${message.id}-${i}`}>
+                    {sources.map((part, i) => (
+                        <SourcesContent key={`${part.sourceId}-${i}`}>
                             <Source
-                                key={`${message.id}-${i}`}
                                 href={part.url}
                                 title={part.url}
                             />

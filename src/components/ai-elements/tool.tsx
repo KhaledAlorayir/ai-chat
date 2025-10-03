@@ -65,7 +65,7 @@ export const ToolHeader = ({
   state,
   ...props
 }: ToolHeaderProps) => (
-  <CollapsibleTrigger
+  <div
     className={cn(
       "flex w-full items-center justify-between gap-4 p-3",
       className
@@ -79,8 +79,7 @@ export const ToolHeader = ({
       </span>
       {getStatusBadge(state)}
     </div>
-    <ChevronDownIcon className="size-4 text-muted-foreground transition-transform group-data-[state=open]:rotate-180" />
-  </CollapsibleTrigger>
+  </div>
 );
 
 export type ToolContentProps = ComponentProps<typeof CollapsibleContent>;
