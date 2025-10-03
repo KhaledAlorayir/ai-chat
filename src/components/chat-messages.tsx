@@ -1,3 +1,5 @@
+"use client";
+
 import {ChatStatus, SourceUrlUIPart} from "ai";
 import {
     Conversation,
@@ -62,7 +64,7 @@ function MessageCard({message}: { message: ChatMessage }) {
                             <Fragment key={`${message.id}-${i}`}>
                                 <Message from={message.role}>
                                     <MessageContent>
-                                        <Response>
+                                        <Response allowedImagePrefixes={['*']}>
                                             {part.text}
                                         </Response>
                                     </MessageContent>
@@ -83,14 +85,16 @@ function MessageCard({message}: { message: ChatMessage }) {
                         );
 
                     case "tool-web_search":
+                    case "tool-image_search":
                         return (
                             <ToolHeader
                                 key={`${message.id}-${i}`}
-                                type="tool-web_search"
-                                title="web search"
+                                type={part.type}
                                 state={part.state}
+                                title={part.type === "tool-web_search" ? "Web Search" : "Image Search"}
                             />
                         );
+
                     default:
                         return null;
                 }

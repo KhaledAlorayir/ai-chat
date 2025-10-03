@@ -9,6 +9,7 @@ type ResponseProps = ComponentProps<typeof Streamdown>;
 export const Response = memo(
   ({ className, ...props }: ResponseProps) => (
     <Streamdown
+        components={{p: ({ node, children }) => <div>{children}</div>}}
       className={cn(
         "size-full [&>*:first-child]:mt-0 [&>*:last-child]:mb-0",
         className

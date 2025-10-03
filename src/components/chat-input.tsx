@@ -1,3 +1,5 @@
+"use client";
+
 import {
     PromptInput,
     PromptInputActionAddAttachments, PromptInputActionMenu, PromptInputActionMenuContent, PromptInputActionMenuTrigger,
