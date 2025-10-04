@@ -1,5 +1,6 @@
 import {integer, sqliteTable, text} from "drizzle-orm/sqlite-core";
 import {sql} from "drizzle-orm";
+import {ChatMessage} from "@/app/api/chat/route";
 
 export const user = sqliteTable("user", {
     id: text().primaryKey(),
@@ -66,6 +67,21 @@ export const verification = sqliteTable("verification", {
     identifier: text().notNull(),
     value: text().notNull(),
     expiresAt: integer({mode: "timestamp_ms"}).notNull(),
+    createdAt: integer({mode: "timestamp_ms"})
+        .default(sql`(cast (unixepoch('subsecond') * 1000 as integer))`)
+        .notNull(),
+    updatedAt: integer({mode: "timestamp_ms"})
+        .default(sql`(cast (unixepoch('subsecond') * 1000 as integer))`)
+        .$onUpdate(() => /* @__PURE__ */ new Date())
+        .notNull(),
+});
+
+export const chat = sqliteTable("chat", {
+    id: text().primaryKey(),
+    messages: text({mode: "json"}).$type<ChatMessage[] | null>(),
+    userId: text()
+        .notNull()
+        .references(() => user.id, {onDelete: "cascade"}),
     createdAt: integer({mode: "timestamp_ms"})
         .default(sql`(cast (unixepoch('subsecond') * 1000 as integer))`)
         .notNull(),

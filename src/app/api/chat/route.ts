@@ -7,10 +7,14 @@ import {
     streamText,
     tool,
     UIDataTypes,
-    UIMessage
+    UIMessage,
+    createIdGenerator
 } from "ai";
 import {getAuthenticatedSession} from "@/auth/auth-server-helpers";
 import {z} from "zod";
+import {db} from "@/db";
+import {chat} from "@/db/schema";
+import {repository} from "@/db/repository";
 
 const imageSearchTool = tool({
     description: "Search the web for an Image",
@@ -30,16 +34,23 @@ type ChatTools = InferUITools<typeof tools>
 export type ChatMessage = UIMessage<never, UIDataTypes, ChatTools>;
 
 export async function POST(req: Request) {
-    await getAuthenticatedSession();
-    const {messages, useWebSearch}: { messages: ChatMessage[], useWebSearch: boolean } = await req.json();
+    const session = await getAuthenticatedSession();
+    const {messages, useWebSearch, id}: { messages: ChatMessage[], useWebSearch: boolean , id: string} = await req.json();
 
     const result = streamText({
         model: openai('gpt-4o-mini'),
         messages: convertToModelMessages(messages),
         tools: useWebSearch ? tools : undefined,
         stopWhen: stepCountIs(2),
-        experimental_transform: smoothStream(),
+        experimental_transform: smoothStream()
     });
 
-    return result.toUIMessageStreamResponse({sendSources: true});
+    return result.toUIMessageStreamResponse({
+        sendSources: true,
+        originalMessages: messages,
+        generateMessageId: createIdGenerator({prefix: 'abc', size: 16}),
+        onFinish: async (data) => {
+            await repository.upsertChat(id, session.user.id, data.messages);
+        }
+    });
 }
