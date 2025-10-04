@@ -6,13 +6,15 @@ import {Avatar, AvatarFallback, AvatarImage} from "@/components/ui/avatar";
 import {Loader2, LogOut} from "lucide-react";
 import {
     DropdownMenu,
-    DropdownMenuContent, DropdownMenuItem,
+    DropdownMenuContent,
+    DropdownMenuItem,
     DropdownMenuSeparator,
     DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu";
 import {useRouter} from "next/navigation";
+import {SidebarTrigger} from "@/components/ui/sidebar";
 
-export function NavBar() {
+export function AppHeader() {
     const session = authClient.useSession();
 
     function googleSignIn() {
@@ -20,27 +22,30 @@ export function NavBar() {
     }
 
     return (
-        <header
-            className="fixed top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-            <div className="flex h-16 items-center justify-between px-4 w-full">
-                <h1 className="text-xl font-semibold tracking-tight">ChatAI</h1>
+            <header
+                className="fixed top-0 z-10 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+                <div className="flex h-16 items-center justify-between px-4 w-full">
+                    <div className="flex items-center gap-2">
+                        <SidebarTrigger />
+                        <h1 className="text-xl font-semibold tracking-tight">ChatAI</h1>
+                    </div>
 
-                <div>
-                    {session.isPending ? (
-                        <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                            <Loader2 className="h-4 w-4 animate-spin"/>
-                            <span>Loading...</span>
-                        </div>
-                    ) : !!session.data ? (
-                        <UserAvatar name={session.data.user.name} image={session.data.user.image}/>
-                    ) : (
-                        <Button onClick={googleSignIn} variant="default" size="sm">
-                            Sign in
-                        </Button>
-                    )}
+                    <div>
+                        {session.isPending ? (
+                            <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                                <Loader2 className="h-4 w-4 animate-spin"/>
+                                <span>Loading...</span>
+                            </div>
+                        ) : !!session.data ? (
+                            <UserAvatar name={session.data.user.name} image={session.data.user.image}/>
+                        ) : (
+                            <Button onClick={googleSignIn} variant="default" size="sm">
+                                Sign in
+                            </Button>
+                        )}
+                    </div>
                 </div>
-            </div>
-        </header>
+            </header>
     );
 }
 

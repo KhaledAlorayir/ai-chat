@@ -4,6 +4,7 @@ import {ChatMessages} from "@/components/chat-ui/chat-messages";
 import {ChatInput} from "@/components/chat-ui/chat-input";
 import {useChat} from "@ai-sdk/react";
 import {ChatMessage} from "@/app/api/chat/route";
+import {useRouter} from "next/navigation";
 
 interface Props {
     chat?: {
@@ -13,10 +14,17 @@ interface Props {
 }
 
 export default function ChatContainer({chat}: Props) {
-    const {messages, sendMessage, status, stop} = useChat<ChatMessage>(chat ? {
+    const router = useRouter();
+
+    const {messages, sendMessage, status, stop, id} = useChat<ChatMessage>(chat ? {
         messages: chat.defaultMessages,
-        id: chat.id
-    } : undefined);
+        id: chat.id,
+    } : {
+        onFinish: () => {
+            router.push(`/${id}`);
+            router.refresh();
+        }
+    });
 
     function onSubmit(value: string, useWebSearch: boolean) {
         if (status === "streaming") {

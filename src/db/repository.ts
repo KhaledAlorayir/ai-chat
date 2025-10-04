@@ -28,7 +28,8 @@ function getChat(chatId: string, userId: string) {
 function getChats(userId: string) {
     return db.query.chat.findMany({
         columns: {id: true},
-        where: (chat, {eq}) => eq(chat.userId, userId)
+        where: (chat, {eq}) => eq(chat.userId, userId),
+        orderBy: (chat, {desc}) => desc(chat.createdAt)
     });
 }
 
