@@ -50,6 +50,9 @@ export async function POST(req: Request) {
         originalMessages: messages,
         generateMessageId: createIdGenerator({prefix: 'abc', size: 16}),
         onFinish: async (data) => {
+            if(data.isAborted) {
+                return;
+            }
             await repository.upsertChat(id, session.user.id, data.messages);
         }
     });

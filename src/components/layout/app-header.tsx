@@ -57,6 +57,7 @@ function UserAvatar(props: { name: string, image?: string | null }) {
             fetchOptions: {
                 onSuccess: () => {
                     void router.push("/");
+                    void router.refresh();
                 }
             }
         });

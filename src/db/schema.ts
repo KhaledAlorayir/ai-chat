@@ -79,6 +79,7 @@ export const verification = sqliteTable("verification", {
 export const chat = sqliteTable("chat", {
     id: text().primaryKey(),
     messages: text({mode: "json"}).$type<ChatMessage[] | null>(),
+    title: text().notNull().default(""),
     userId: text()
         .notNull()
         .references(() => user.id, {onDelete: "cascade"}),

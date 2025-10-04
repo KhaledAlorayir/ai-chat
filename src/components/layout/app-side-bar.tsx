@@ -62,7 +62,7 @@ async function Conversions() {
             {chats.map(chat => (
                 <SideBarLink
                     key={chat.id}
-                    label={chat.id}
+                    label={chat.title}
                     href={`/${chat.id}`}
                 />
             ))}

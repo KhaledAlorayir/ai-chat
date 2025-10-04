@@ -2,6 +2,7 @@ import {ChatMessage} from "@/app/api/chat/route";
 import {db} from "@/db/index";
 import {chat} from "@/db/schema";
 import {eq} from "drizzle-orm";
+import {getChatLabel} from "@/lib/utils";
 
 async function upsertChat(chatId: string, userId: string, messages: ChatMessage[]) {
     const results = await db.query.chat.findFirst({
@@ -11,7 +12,7 @@ async function upsertChat(chatId: string, userId: string, messages: ChatMessage[
     });
 
     if(!results) {
-        await db.insert(chat).values({id: chatId, userId, messages});
+        await db.insert(chat).values({id: chatId, userId, messages, title: getChatLabel(messages)});
     } else {
         await db.update(chat).set({messages}).where(eq(chat.id, results.id));
     }
@@ -27,7 +28,7 @@ function getChat(chatId: string, userId: string) {
 
 function getChats(userId: string) {
     return db.query.chat.findMany({
-        columns: {id: true},
+        columns: {id: true, title: true},
         where: (chat, {eq}) => eq(chat.userId, userId),
         orderBy: (chat, {desc}) => desc(chat.createdAt)
     });
