@@ -4,7 +4,6 @@ import {chat} from "@/db/schema";
 import {eq} from "drizzle-orm";
 
 async function upsertChat(chatId: string, userId: string, messages: ChatMessage[]) {
-    console.log(chatId);
     const results = await db.query.chat.findFirst({
         columns: {id: true},
         where: (chat, {eq,and}) =>
@@ -18,4 +17,19 @@ async function upsertChat(chatId: string, userId: string, messages: ChatMessage[
     }
 }
 
-export const repository = {upsertChat};
+function getChat(chatId: string, userId: string) {
+    return db.query.chat.findFirst({
+        columns: {id: true, messages: true},
+        where: (chat, {eq,and}) =>
+            and(eq(chat.id, chatId), eq(chat.userId, userId))
+    });
+}
+
+function getChats(userId: string) {
+    return db.query.chat.findMany({
+        columns: {id: true},
+        where: (chat, {eq}) => eq(chat.userId, userId)
+    });
+}
+
+export const repository = {upsertChat, getChat, getChats};

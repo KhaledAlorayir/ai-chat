@@ -7,7 +7,7 @@ import {ChatMessage} from "@/app/api/chat/route";
 
 interface Props {
     chat?: {
-        id: "abc";
+        id: string;
         defaultMessages: ChatMessage[];
     };
 }

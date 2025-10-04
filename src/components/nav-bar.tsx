@@ -10,6 +10,7 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu";
+import {useRouter} from "next/navigation";
 
 export function NavBar() {
     const session = authClient.useSession();
@@ -44,6 +45,18 @@ export function NavBar() {
 }
 
 function UserAvatar(props: { name: string, image?: string | null }) {
+    const router = useRouter();
+
+    function signOut() {
+        authClient.signOut({
+            fetchOptions: {
+                onSuccess: () => {
+                    void router.push("/");
+                }
+            }
+        });
+    }
+
     return (
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
@@ -59,7 +72,7 @@ function UserAvatar(props: { name: string, image?: string | null }) {
                     <p className="leading-none font-medium">{props.name}</p>
                 </div>
                 <DropdownMenuSeparator/>
-                <DropdownMenuItem className="cursor-pointer" onSelect={() => authClient.signOut()}>
+                <DropdownMenuItem className="cursor-pointer" onSelect={() => signOut()}>
                     <LogOut className="mr-2 h-4 w-4"/>
                     <span>Log out</span>
                 </DropdownMenuItem>

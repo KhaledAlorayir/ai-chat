@@ -10,7 +10,7 @@ import {
     UIMessage,
     createIdGenerator
 } from "ai";
-import {getAuthenticatedSession} from "@/auth/auth-server-helpers";
+import {getAuthenticatedSessionOrThrow} from "@/auth/auth-server-helpers";
 import {z} from "zod";
 import {db} from "@/db";
 import {chat} from "@/db/schema";
@@ -34,7 +34,7 @@ type ChatTools = InferUITools<typeof tools>
 export type ChatMessage = UIMessage<never, UIDataTypes, ChatTools>;
 
 export async function POST(req: Request) {
-    const session = await getAuthenticatedSession();
+    const session = await getAuthenticatedSessionOrThrow();
     const {messages, useWebSearch, id}: { messages: ChatMessage[], useWebSearch: boolean , id: string} = await req.json();
 
     const result = streamText({
