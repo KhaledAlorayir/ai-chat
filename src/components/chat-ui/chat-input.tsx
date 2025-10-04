@@ -2,53 +2,70 @@
 
 import {
     PromptInput,
-    PromptInputActionAddAttachments, PromptInputActionMenu, PromptInputActionMenuContent, PromptInputActionMenuTrigger,
-    PromptInputAttachment,
-    PromptInputAttachments,
-    PromptInputBody, PromptInputButton, PromptInputSubmit, PromptInputTextarea,
-    PromptInputToolbar, PromptInputTools
+    PromptInputBody,
+    PromptInputButton,
+    PromptInputModelSelect,
+    PromptInputModelSelectContent,
+    PromptInputModelSelectItem,
+    PromptInputModelSelectTrigger,
+    PromptInputModelSelectValue,
+    PromptInputSubmit,
+    PromptInputTextarea,
+    PromptInputToolbar,
+    PromptInputTools
 } from "@/components/ai-elements/prompt-input";
 import {useState} from "react";
 import {authClient} from "@/auth/auth-client";
 import {GlobeIcon} from "lucide-react";
 import {ChatStatus} from "ai";
+import {Model} from "@/lib/ai-models";
 
 interface Props {
     status: ChatStatus;
-    onSubmit: (value: string, useWebSearch: boolean) => void;
+    onSubmit: (value: string, useWebSearch: boolean, model: Model) => void;
+    activeModel: Model,
+    webSearchActive: boolean;
 }
 
 export function ChatInput(props: Props) {
     const [input, setInput] = useState("");
-    const [useWebSearch, setUseWebSearch] = useState(false);
+    const [useWebSearch, setUseWebSearch] = useState(props.webSearchActive);
+    const [model, setModel] = useState<Model>(props.activeModel);
 
     const session = authClient.useSession();
 
     function submitHandler() {
-        props.onSubmit(input, useWebSearch);
+        props.onSubmit(input, useWebSearch, model);
         setInput("");
     }
 
     return (
             <PromptInput onSubmit={submitHandler}>
                 <PromptInputBody>
-                    <PromptInputAttachments>
-                        {(attachment) => (
-                            <PromptInputAttachment data={attachment}/>
-                        )}
-                    </PromptInputAttachments>
                     <PromptInputTextarea disabled={!session.data} maxLength={512} onChange={(e) => {
                         setInput(e.target.value);
                     }} value={input}/>
                 </PromptInputBody>
                 <PromptInputToolbar className="py-3">
                     <PromptInputTools>
-                        <PromptInputActionMenu>
-                            <PromptInputActionMenuTrigger/>
-                            <PromptInputActionMenuContent>
-                                <PromptInputActionAddAttachments disabled={!session.data}/>
-                            </PromptInputActionMenuContent>
-                        </PromptInputActionMenu>
+                        <PromptInputModelSelect
+                            onValueChange={(value) => {
+                                setModel((value as Model));
+                            }}
+                            value={model}
+                        >
+                            <PromptInputModelSelectTrigger>
+                                <PromptInputModelSelectValue />
+                            </PromptInputModelSelectTrigger>
+                            <PromptInputModelSelectContent>
+                                {Object.values(Model).map((model) => (
+                                    <PromptInputModelSelectItem key={model} value={model}>
+                                        {model}
+                                    </PromptInputModelSelectItem>
+                                ))}
+
+                            </PromptInputModelSelectContent>
+                        </PromptInputModelSelect>
 
                         <PromptInputButton
                             onClick={() => setUseWebSearch(!useWebSearch)}

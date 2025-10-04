@@ -15,8 +15,8 @@ import {CopyIcon} from "lucide-react";
 import {Loader} from "@/components/ai-elements/loader";
 import {authClient} from "@/auth/auth-client";
 import {Source, Sources, SourcesContent, SourcesTrigger} from "@/components/ai-elements/sources";
-import {ChatMessage} from "@/app/api/chat/route";
 import {ToolHeader} from "@/components/ai-elements/tool";
+import {ChatMessage} from "@/lib/ai-models";
 
 interface Props {
     messages: ChatMessage[];

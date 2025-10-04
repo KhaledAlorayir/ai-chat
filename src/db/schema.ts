@@ -1,6 +1,6 @@
 import {integer, sqliteTable, text} from "drizzle-orm/sqlite-core";
 import {sql} from "drizzle-orm";
-import {ChatMessage} from "@/app/api/chat/route";
+import {ChatMessage, Model} from "@/lib/ai-models";
 
 export const user = sqliteTable("user", {
     id: text().primaryKey(),
@@ -80,6 +80,8 @@ export const chat = sqliteTable("chat", {
     id: text().primaryKey(),
     messages: text({mode: "json"}).$type<ChatMessage[] | null>(),
     title: text().notNull().default(""),
+    activeModel: text().notNull().$type<Model>(),
+    webSearchActive: integer({mode: "boolean"}).notNull(),
     userId: text()
         .notNull()
         .references(() => user.id, {onDelete: "cascade"}),

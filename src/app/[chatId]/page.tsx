@@ -13,6 +13,11 @@ export default async function ChatPage(props: PageProps<'/[chatId]'>) {
     }
 
     return (
-        <ChatContainer chat={{id: chat.id, defaultMessages: chat.messages || []}} />
+        <ChatContainer chat={{
+            id: chat.id,
+            defaultMessages: chat.messages || [],
+            activeModel: chat.activeModel,
+            webSearchActive: chat.webSearchActive
+        }} />
     )
 }
