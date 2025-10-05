@@ -21,7 +21,7 @@ const modelRegistry = createProviderRegistry({
 
 export const models = {
     [Model.GPT4]: {
-        languageModel: modelRegistry.languageModel('openai:gpt-4.1-mini'),
+        languageModel: modelRegistry.languageModel('openai:gpt-4.1'),
         tools: {
             web_search: openai.tools.webSearch(),
             image_search: imageSearchTool,
