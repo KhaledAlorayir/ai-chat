@@ -4,7 +4,8 @@ import {ChatMessages} from "@/components/chat-ui/chat-messages";
 import {ChatInput} from "@/components/chat-ui/chat-input";
 import {useChat} from "@ai-sdk/react";
 import {useRouter} from "next/navigation";
-import {ChatMessage, Model} from "@/lib/ai-models";
+import {ChatMessage, Model} from "@/lib/shared-types";
+import {toast} from "sonner";
 
 interface Props {
     chat?: {
@@ -21,12 +22,23 @@ export default function ChatContainer({chat}: Props) {
     const {messages, sendMessage, status, stop, id} = useChat<ChatMessage>(chat ? {
         messages: chat.defaultMessages,
         id: chat.id,
+        onError: errorHandler,
     } : {
         onFinish: () => {
             router.push(`/${id}`);
             router.refresh();
-        }
+        },
+        onError: errorHandler,
     });
+
+    function errorHandler(error: Error) {
+        const reason = JSON.parse(error.message).reason;
+
+        toast.error("an error has occurred", {
+            description: reason,
+            position: "top-right"
+        });
+    }
 
     function onSubmit(value: string, useWebSearch: boolean, model: Model) {
         if (status === "streaming") {

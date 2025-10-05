@@ -14,9 +14,7 @@ export async function getAuthenticatedSessionOrThrow() {
 }
 
 export async function getAuthenticatedSession() {
-    const session = await auth.api.getSession({
+    return auth.api.getSession({
         headers: await headers()
     });
-
-    return session;
 }

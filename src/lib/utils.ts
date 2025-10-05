@@ -1,6 +1,7 @@
 import { clsx, type ClassValue } from "clsx"
 import { twMerge } from "tailwind-merge"
-import {ChatMessage} from "@/lib/ai-models";
+
+import {ChatMessage} from "@/lib/shared-types";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
@@ -16,5 +17,5 @@ export function getChatLabel(messages: ChatMessage[]) {
     }
 
     // @ts-expect-error no error
-    return title.text.substring(0, 20);
+    return title.text.substring(0, 25);
 }

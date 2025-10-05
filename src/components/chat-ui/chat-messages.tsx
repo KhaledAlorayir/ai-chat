@@ -16,7 +16,8 @@ import {Loader} from "@/components/ai-elements/loader";
 import {authClient} from "@/auth/auth-client";
 import {Source, Sources, SourcesContent, SourcesTrigger} from "@/components/ai-elements/sources";
 import {ToolHeader} from "@/components/ai-elements/tool";
-import {ChatMessage} from "@/lib/ai-models";
+
+import {ChatMessage} from "@/lib/shared-types";
 
 interface Props {
     messages: ChatMessage[];

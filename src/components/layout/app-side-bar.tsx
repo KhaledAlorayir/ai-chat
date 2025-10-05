@@ -15,6 +15,7 @@ import {Suspense} from "react";
 import {Loader} from "@/components/ai-elements/loader";
 import {Button} from "@/components/ui/button";
 import Link from "next/link";
+import {SideBarButton} from "@/components/layout/side-bar-button";
 
 async function getChats() {
     const session = await getAuthenticatedSession();
@@ -36,9 +37,7 @@ export function AppSideBar() {
                     <h1 className="text-xl font-semibold tracking-tight">ChatAI</h1>
                 </div>
 
-                <Button variant="default" size="sm" asChild>
-                    <Link href="/">New Chat</Link>
-                </Button>
+                <SideBarButton/>
             </SidebarHeader>
             <SidebarContent>
                 <SidebarGroup>

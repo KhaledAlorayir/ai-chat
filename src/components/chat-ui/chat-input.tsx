@@ -18,7 +18,8 @@ import {useState} from "react";
 import {authClient} from "@/auth/auth-client";
 import {GlobeIcon} from "lucide-react";
 import {ChatStatus} from "ai";
-import {Model} from "@/lib/ai-models";
+
+import {Model} from "@/lib/shared-types";
 
 interface Props {
     status: ChatStatus;
@@ -35,7 +36,11 @@ export function ChatInput(props: Props) {
     const session = authClient.useSession();
 
     function submitHandler() {
-        props.onSubmit(input, useWebSearch, model);
+        if(!input.trim()) {
+            return;
+        }
+
+        props.onSubmit(input.trim(), useWebSearch, model);
         setInput("");
     }
 
@@ -76,7 +81,7 @@ export function ChatInput(props: Props) {
                         </PromptInputButton>
                     </PromptInputTools>
                     <PromptInputSubmit
-                        disabled={!session.data}
+                        disabled={!session.data || !input.trim()}
                         status={props.status}
                     />
                 </PromptInputToolbar>

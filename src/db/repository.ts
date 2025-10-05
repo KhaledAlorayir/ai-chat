@@ -2,7 +2,7 @@ import {db} from "@/db/index";
 import {chat} from "@/db/schema";
 import {eq} from "drizzle-orm";
 import {getChatLabel} from "@/lib/utils";
-import {ChatMessage, Model} from "@/lib/ai-models";
+import {ChatMessage, Model} from "@/lib/shared-types";
 
 async function upsertChat(chatId: string, userId: string, messages: ChatMessage[], activeModel: Model, webSearchActive: boolean) {
     const results = await db.query.chat.findFirst({

@@ -1,6 +1,6 @@
 import {integer, sqliteTable, text} from "drizzle-orm/sqlite-core";
 import {sql} from "drizzle-orm";
-import {ChatMessage, Model} from "@/lib/ai-models";
+import {ChatMessage, Model} from "@/lib/shared-types";
 
 export const user = sqliteTable("user", {
     id: text().primaryKey(),

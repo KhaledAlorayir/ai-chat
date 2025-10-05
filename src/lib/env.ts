@@ -10,6 +10,7 @@ const schema = z.object({
     OPENAI_API_KEY: z.string().trim(),
     GOOGLE_GENERATIVE_AI_API_KEY: z.string().trim(),
     SERP_API_KEY: z.string().trim(),
+    MOCK_SERP: z.stringbool()
 });
 
 
