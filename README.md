@@ -124,3 +124,15 @@ This endpoint handles sending messages to the AI and streaming responses in real
 - Automatic chat persistence
 - Strong type safety with TypeScript
 - Error Handling
+
+---
+### Demo
+
+1. **Web Search**:
+   ![Demo Image 1](/demo/web-search.png)
+
+2. **Custom Image Search Tool**:
+   ![Demo Image 3](/demo/image-search.png)
+
+3. **Changing Models**:
+   ![Demo Image 4](/demo/gemini.png)
