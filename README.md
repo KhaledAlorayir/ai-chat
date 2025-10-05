@@ -26,15 +26,15 @@ A full-stack, ChatGPT-style AI chat application built with modern web technologi
 
 ## 🛠️ Tech Stack
 
-| Layer                  | Technology                                                                      |
-|------------------------|---------------------------------------------------------------------------------|
-| **Frontend / Backend** | [Next.js](https://nextjs.org/) With Server Components And App Router            |
-| **AI Integration**     | [Vercel AI SDK](https://sdk.vercel.ai/) with OpenAi GPT-4.1 & Google Gemini 2.5 |
-| **Database**           | [Turso](https://turso.tech/)                                                    |
-| **ORM**                | [Drizzle ORM](https://orm.drizzle.team/)                                        |
-| **Auth**               | [BetterAuth](https://better-auth.dev/) with Google OAuth                        |
-| **Styling**            | Tailwind CSS, shadcn ui, Vercel AI Elements                                     |
-| **Deployment**         | [Vercel](https://vercel.com/)                                                   |
+| Layer                  | Technology                                                                                                                                           |
+|------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------|
+| **Frontend / Backend** | [Next.js](https://nextjs.org/) With Server Components And App Router                                                                                 |
+| **AI Integration**     | [Vercel AI SDK](https://sdk.vercel.ai/) with OpenAi GPT-4.1 & Google Gemini 2.5                                                                      |
+| **Database**           | [Turso](https://turso.tech/)                                                                                                                         |
+| **ORM**                | [Drizzle ORM](https://orm.drizzle.team/)                                                                                                             |
+| **Auth**               | [BetterAuth](https://www.better-auth.com/) with Google OAuth                                                                                         |
+| **Styling**            | [Tailwind](https://tailwindcss.com/), [ShadcnUi](https://ui.shadcn.com/), [Vercel AI elements](https://vercel.com/changelog/introducing-ai-elements) |
+| **Deployment**         | [Vercel](https://vercel.com/)                                                                                                                        |
 ---
 
 ## 🧪 Core Highlights
