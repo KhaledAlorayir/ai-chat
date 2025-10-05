@@ -27,18 +27,21 @@ export default function RootLayout({
 }>) {
     return (
         <html lang="en" className="dark" suppressHydrationWarning>
-            <body
-                className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-            >
-                <SidebarProvider>
-                    <AppHeader/>
-                    <AppSideBar/>
-                    <main className="max-w-7xl mx-auto pt-20 pb-4 px-2 md:px-6 relative size-full h-screen">
-                        {children}
-                    </main>
-                    <Toaster/>
-                </SidebarProvider>
-            </body>
+        <body
+            className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        >
+        <SidebarProvider>
+            <AppSideBar/>
+
+            <main className="h-dvh w-full">
+                <AppHeader/>
+                <section className="max-w-7xl mx-auto pb-4 px-2 h-[calc(100%-4rem)]">
+                    {children}
+                </section>
+            </main>
+            <Toaster/>
+        </SidebarProvider>
+        </body>
         </html>
     );
 }

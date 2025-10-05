@@ -31,12 +31,7 @@ async function getChats() {
 export function AppSideBar() {
     return (
         <Sidebar>
-            <SidebarHeader>
-                <div className="flex items-center gap-2">
-                    <SidebarTrigger/>
-                    <h1 className="text-xl font-semibold tracking-tight">ChatAI</h1>
-                </div>
-
+            <SidebarHeader className="pt-6">
                 <SideBarButton/>
             </SidebarHeader>
             <SidebarContent>
